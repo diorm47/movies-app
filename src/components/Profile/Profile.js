@@ -61,7 +61,6 @@ const Profile = ({ setLoginStatus }) => {
         localStorage.removeItem("currentId");
         localStorage.removeItem("search");
         localStorage.removeItem("token");
-        console.log("sdvhjdsvhkjdvshkj");
         setLoginStatus(false);
         navigate("/", { replace: true });
       })
@@ -70,7 +69,6 @@ const Profile = ({ setLoginStatus }) => {
         localStorage.removeItem("currentId");
         localStorage.removeItem("search");
         localStorage.removeItem("token");
-        console.log("sdvhjdsvhkjdvshkj");
         setLoginStatus(false);
         navigate("/", { replace: true });
       });

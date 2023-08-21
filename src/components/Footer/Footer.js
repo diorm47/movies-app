@@ -1,10 +1,12 @@
-import './Footer.css';
+import "./Footer.css";
 
 const Footer = () => {
   return (
     <footer className="footer container">
-      <div className="footer__top" >
-        <p className="footer__text" >Учебный проект Яндекс.Практикум х BeatFilm.</p>
+      <div className="footer__top">
+        <p className="footer__text">
+          Учебный проект Яндекс.Практикум х BeatFilm.
+        </p>
       </div>
       <div className="footer__bottom">
         <p className="footer__coryright">&copy; {new Date().getFullYear()}</p>
@@ -32,7 +34,7 @@ const Footer = () => {
         </ul>
       </div>
     </footer>
-  )
+  );
 };
 
 export default Footer;

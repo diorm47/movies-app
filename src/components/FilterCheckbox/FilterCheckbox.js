@@ -1,6 +1,6 @@
-import './FilterCheckbox.css'
+import "./FilterCheckbox.css";
 
-const FilterCheckbox = ({checkHandler, isChecked}) => {
+const FilterCheckbox = ({ checkHandler, isChecked }) => {
   return (
     <label className="checkbox">
       <input
@@ -13,7 +13,7 @@ const FilterCheckbox = ({checkHandler, isChecked}) => {
       <span className="checkbox__element checkbox__element_type_custom" />
       Короткометражки
     </label>
-  )
+  );
 };
 
 export default FilterCheckbox;

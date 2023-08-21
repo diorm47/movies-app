@@ -34,9 +34,14 @@ const Register = ({ setLoginStatus }) => {
       .then((userData) => {
         setCurrentUser(userData);
         setLoginStatus(true);
-  
+        localStorage.setItem("token", userData.token);
         localStorage.setItem("currentId", userData._id);
         navigate("/movies", { replace: true });
+      })
+      .then(() => {
+        mainApi.reEnter().then((userData) => {
+          setCurrentUser(userData);
+        });
       })
       .catch((err) => {
         setApiErrorMessage(err);
