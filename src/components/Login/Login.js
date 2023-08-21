@@ -15,8 +15,6 @@ const Login = ({ setLoginStatus }) => {
   const navigate = useNavigate();
   const [apiErrorMessage, setApiErrorMessage] = useState("");
   const [isLoadind, setIsLoading] = useState(false);
-  const defaultRegisterInputClassName = "auth__input";
-  const errorRegisterInputClassName = "auth__input auth__input_type_error";
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -63,8 +61,8 @@ const Login = ({ setLoginStatus }) => {
             type="email"
             className={
               inputVilidities.email === undefined || inputVilidities.email
-                ? defaultRegisterInputClassName
-                : errorRegisterInputClassName
+                ? "auth__input"
+                : "auth__input auth__input_type_error"
             }
             name="email"
             required
@@ -84,8 +82,8 @@ const Login = ({ setLoginStatus }) => {
             type="password"
             className={
               inputVilidities.password === undefined || inputVilidities.password
-                ? defaultRegisterInputClassName
-                : errorRegisterInputClassName
+                ? "auth__input"
+                : "auth__input auth__input_type_error"
             }
             name="password"
             required

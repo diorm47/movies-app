@@ -1,40 +1,36 @@
-import SectionTitle from '../SectionTitle/SectionTitle';
-import './AboutProject.css'
-
-const AboutProject = () => {
+import "./AboutProject.css";
+import SectionTitle from "../SectionTitle/SectionTitle";
+// AboutProject — компонент с описанием дипломного проекта.
+const AboutProject = (props) => {
   return (
-    <section className="about container" id="about">
-      <SectionTitle>О проекте</SectionTitle>
-      <div className="about__plan">
-        <div className="about__segment">
-          <h3 className="about__subtitle">
-            Дипломный проект включал 5&#160;этапов
-          </h3>
-          <p className="about__text">
-            Составление плана, работу над бэкендом, вёрстку, добавление функциональности и финальные доработки.
+    <section id="#project" className="project">
+      <SectionTitle title={"О проекте"} />
+      <ul className="project__text-list">
+        <li>
+          <h3 className="project__title">Дипломный проект включал 5 этапов</h3>
+          <p className="project__text">
+            Составление плана, работу над бэкендом, вёрстку, добавление
+            функциональности и финальные доработки.
           </p>
-        </div>
-        <div className="about__segment">
-          <h3 className="about__subtitle">
-            На выполнение диплома ушло 5&#160;недель
+        </li>
+        <li>
+          <h3 className="project__title">
+            На выполнение диплома ушло 5 недель
           </h3>
-          <p className="about__text">
-            У каждого этапа был мягкий и жёсткий дедлайн, которые нужно было соблюдать, чтобы успешно защититься.
+          <p className="project__text">
+            У каждого этапа был мягкий и жёсткий дедлайн, которые нужно было
+            соблюдать, чтобы успешно защититься.
           </p>
-        </div>
-      </div>
-      <div className="about__progress">
-        <div className="about__week about__week_type_first">
-          <span className="about__week-lasts about__week-lasts_type_first">1 неделя</span>
-          <span className="about__week-title">Back-end</span>
-        </div>
-        <div className="about__week about__week_type_other">
-          <span className="about__week-lasts about__week-lasts_type_other">4 недели</span>
-          <span className="about__week-title">Front-end</span>
-        </div>
+        </li>
+      </ul>
+      <div className="project__progress">
+        <p className="project__week project__week_type_green">1 неделя</p>
+        <p className="project__week">4 недели</p>
+        <p className="project__week-signature">Back-end</p>
+        <p className="project__week-signature">Front-end</p>
       </div>
     </section>
-  )
+  );
 };
 
 export default AboutProject;

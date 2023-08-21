@@ -1,6 +1,6 @@
 import "./Promo.css";
-
-const Promo = () => {
+// Promo — компонент с вёрсткой баннера страницы «О проекте».
+const Promo = (props) => {
   return (
     <section className="promo">
       <div className="promo__title-container">

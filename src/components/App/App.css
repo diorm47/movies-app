@@ -1,11 +1,18 @@
-.body {
+.app {
+  background: #202020;
+  color: #fff;
+  width: 100%;
+  min-width: 320px;
+  max-width: 1280px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  background-color: var(--main-bg-color);
-  font-family: "Inter", "Arial", sans-serif;
-  font-style: normal;
-  color: var(--main-text-color);
+  font-family: "Inter", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
 }
 
 .preloader-wrapper {

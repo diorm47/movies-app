@@ -1,44 +1,87 @@
 .portfolio {
-  padding: 85px 0 125px;
+  padding: 0px 70px 125px 70px;
 }
 
 .portfolio__title {
-  font-weight: 400;
+  margin: 0;
+  padding: 0;
   font-size: 18px;
-  line-height: 1.11;
-  color: #8b8b8b;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgba(139, 139, 139, 1);
 }
 
-@media screen and (max-width: 1200px) {
+.portfolio__list {
+  margin: 0;
+  padding: 29px 0 0 0;
+  list-style: none;
+}
+
+.portfolio__link {
+  background: url("../../../images/arrow.svg") no-repeat right;
+  background-size: 18px;
+  display: block;
+  padding: 20px 0;
+  width: 100%;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 50px;
+  letter-spacing: -1.2px;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.3s linear;
+  border-bottom: 1px solid rgba(66, 66, 66, 1);
+}
+
+.portfolio__link:hover {
+  opacity: 0.7;
+}
+
+/* .portfolio__link::after {
+  content: "";
+  top: 0;
+  right: 0;
+  position: absolute;
+  background-image: url("../../../images/arrow.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+} */
+
+/* Стили для планшетов (768px) */
+@media screen and (min-width: 321px) and (max-width: 768px) {
   .portfolio {
-    padding: 85px 30px 125px;
+    padding: 0px 50px 91px 50px;
+  }
+  .portfolio__link {
+    font-size: 28px;
   }
 }
 
-@media screen and (max-width: 900px) {
+/* Стили для мобильных устройств (320px) */
+@media screen and (max-width: 320px) {
   .portfolio {
-    padding: 75px 50px 93px;
+    padding: 0px 14px 70px 14px;
   }
-}
-
-@media screen and (max-width: 600px) {
-  .portfolio {
-    padding: 70px 14px 70px;
-  }
-
   .portfolio__title {
     font-size: 14px;
-    line-height: 1.43;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
   }
-}
-
-@media screen and (max-width: 480px) {
-  .portfolio {
-    padding: 58px 14px 70px;
+  .portfolio__link {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px; /* 155.556% */
+    letter-spacing: -0.72px;
+    padding: 19px 0;
+    background-size: 11px;
   }
-
-  .portfolio__title {
-    font-size: 14px;
-    line-height: 1.43;
+  .portfolio__list {
+    padding: 24px 0 0 0;
   }
 }

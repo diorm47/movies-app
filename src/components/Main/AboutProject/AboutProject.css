@@ -1,146 +1,114 @@
-.about {
-  padding: 110px 0 110px;
+.project {
+  padding: 110px 70px;
 }
-
-.about__plan {
-  margin-top: 70px;
+.project__text-list {
   display: flex;
+  flex-direction: row;
   gap: 40px;
-}
-
-.about__subtitle {
+  padding: 70px 0 0 0;
   margin: 0;
-  margin-bottom: 26px;
-  font-weight: 400;
+  list-style: none;
+}
+.project__title {
+  margin: 0;
+  padding: 0 0 26px 0;
   font-size: 20px;
-  line-height: 1.2;
+  font-weight: 400;
+  line-height: normal;
   letter-spacing: -0.8px;
 }
-
-.about__text {
+.project__text {
   margin: 0;
-  font-weight: 400;
+  padding: 0 0 110px 0;
+  max-width: 550px;
   font-size: 14px;
-  line-height: 1.49;
+  line-height: 20px;
+}
+.project__progress {
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr) 4fr;
+  grid-template-rows: repeat(2, auto);
 }
 
-.about__progress {
-  width: 100%;
-  margin-top: 110px;
-  display: flex;
+.project__week {
+  margin: 0;
+  padding: 12px 10px;
+  font-size: 14px;
+  line-height: 13px;
+  font-weight: 400;
+  text-align: center;
+  background: #303030;
 }
 
-.about__week {
+.project__week_type_green {
+  color: #000;
+  background: #3ddc84;
+}
+
+.project__week-signature {
+  margin: 0;
+  padding: 17px 0 0 0;
+  font-size: 14px;
+  line-height: 13px;
+  font-weight: 400;
+  color: #a0a0a0;
   text-align: center;
 }
-
-.about__week_type_first {
-  flex-basis: 228px;
-}
-
-.about__week_type_other {
-  flex-grow: 1;
-  flex-basis: calc(100%-228px);
-}
-
-.about__week-lasts {
-  display: block;
-  padding: 9px 0 9px;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 17px;
-}
-
-.about__week-lasts_type_first {
-  color: #000;
-  background-color: #3ddc84;
-}
-
-.about__week-lasts_type_other {
-  color: #fff;
-  background-color: #303030;
-}
-
-.about__week-title {
-  display: block;
-  margin-top: 14px;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 17px;
-  color: #8b8b8b;
-}
-
-@media screen and (max-width: 1200px) {
-  .about {
-    padding: 90px 30px 90px;
+/* Стили для планшетов (768px) */
+@media screen and (min-width: 321px) and (max-width: 768px) {
+  .project {
+    padding: 92px 50px;
   }
-}
-
-@media screen and (max-width: 900px) {
-  .about {
-    padding: 90px 50px 90px;
-  }
-
-  .about__subtitle {
-    line-height: 1;
-  }
-
-  .about__text {
-    font-size: 12px;
-  }
-
-  .about__plan {
+  .project__text-list {
     gap: 30px;
   }
-
-  .about__progress {
-    margin-top: 93px;
+  .project__text {
+    font-size: 12px;
+    line-height: 18px;
+    padding: 0 0 93px 0;
   }
-
-  .about__week_type_first {
-    flex-basis: 21%;
+  .project__title {
+    padding: 0 0 22px 0;
+  }
+  .project__week-signature {
+    padding: 15px 0 0 0;
   }
 }
-
-@media screen and (max-width: 560px) {
-  .about {
-    padding: 70px 18px 70px;
+/* Стили для мобильных устройств (320px) */
+@media screen and (max-width: 320px) {
+  .project {
+    padding: 70px 18px;
   }
-
-  .about__subtitle {
-    line-height: 1.2;
-  }
-
-  .about__text {
-    font-size: 11px;
-  }
-
-  .about__plan {
-    margin-top: 60px;
-    flex-direction: column;
-    gap: 56px;
-  }
-
-  .about__progress {
-    margin-top: 55px;
-  }
-
-  .about__subtitle {
-    margin-bottom: 16px;
+  .project__title {
     font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
     letter-spacing: -0.72px;
+    padding: 0 0 17px 0;
   }
-
-  .about__week_type_first {
-    flex-basis: 35%;
+  .project__text-list {
+    flex-direction: column;
+    padding: 61px 0 42px 0;
   }
-
-  .about__week-lasts {
+  .project__text {
     font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px; /* 145.455% */
+    padding: 0 0 17px 0;
   }
-
-  .about__week-title {
-    margin-top: 10px;
+  .project__week {
     font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  .project__week-signature {
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 7px 0 0 0;
   }
 }

@@ -1,22 +1,23 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-import "./App.css";
-import Main from "../Main/Main";
-import Movies from "../Movies/Movies";
-import SavedMovies from "../SavedMovies/SavedMovies";
-import NotFound from "../NotFound/NotFound";
-import Profile from "../Profile/Profile";
-import Register from "../Register/Register";
-import Login from "../Login/Login";
 import { useEffect, useState } from "react";
-import Layout from "../Layout/Layout";
-import Header from "../Header/Header";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { CurrentUserContextProvider } from "../../contexts/CurrentUserContextProvider";
-import { mainApi } from "../../utils/MainApi";
 import { SavedMoviesContextProvider } from "../../contexts/SavedMoviesContextProvider";
-import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-import Preloader from "../Preloader/Preloader";
+import { mainApi } from "../../utils/MainApi";
+import Header from "../Header/Header";
+import Layout from "../Layout/Layout";
+import Login from "../Login/Login";
+import Main from "../Main/Main";
 import Modal from "../Modal/Modal";
 import ModalContent from "../Modal/ModalContent";
+import Movies from "../Movies/Movies";
+import NotFoundPage from "../NotFoundPage/NotFoundPage";
+import Preloader from "../Preloader/Preloader";
+import Profile from "../Profile/Profile";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import Register from "../Register/Register";
+import SavedMovies from "../SavedMovies/SavedMovies";
+import "./App.css";
+// App — корневой компонент приложения, его создаёт CRA.
 
 const App = () => {
   const [isLogged, setIsLogged] = useState(false);
@@ -55,7 +56,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className="body">
+    <div className="app">
       {isTokenChecked ? (
         <CurrentUserContextProvider context={{ currentUser, setCurrentUser }}>
           <SavedMoviesContextProvider context={{ savedMovies, setSavedMovies }}>
@@ -118,7 +119,7 @@ const App = () => {
                 }
               />
               <Route path="*" element={<Navigate to="/404" replace />} />
-              <Route path="/404" element={<NotFound />} />
+              <Route path="/404" element={<NotFoundPage />} />
             </Routes>
 
             <Modal isOpen={isModalOpened}>

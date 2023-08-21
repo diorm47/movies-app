@@ -3,8 +3,7 @@
   flex-direction: row;
   gap: 190px;
   background: #073042;
-
-  padding: 76px calc((100% - 1140px) / 2);
+  padding: 76px 70px;
 }
 .promo__title-container {
   display: flex;

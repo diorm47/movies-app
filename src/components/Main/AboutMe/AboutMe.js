@@ -1,16 +1,16 @@
 import SectionTitle from "../SectionTitle/SectionTitle";
 import "./AboutMe.css";
-import studentPhoto from "../../../images/student-photo.jpg";
-
-const AboutMe = () => {
+import photo from "../../../images/about-me__photo.jpg";
+// AboutMe — компонент с информацией о студенте.
+const AboutMe = (props) => {
   return (
-    <section className="about-me container" id="student">
-      <SectionTitle>Студент</SectionTitle>
-      <div className="about-me__info">
-        <div className="about-me__bio">
-          <h3 className="about-me__name">Ибрагим</h3>
-          <p className="about-me__short">Фронтенд-разработчик, 30 лет</p>
-          <p className="about-me__description">
+    <section className="about-me">
+      <SectionTitle title={"Студент"} />
+      <div className="about-me__container">
+        <div className="about-me__info">
+          <h2 className="about-me__title">Ибрагим</h2>
+          <h3 className="about-me__subtitle">Фронтенд-разработчик, 30 лет</h3>
+          <p className="about-me__text">
             Я родился и живу в Саратове, закончил факультет экономики СГУ. У
             меня есть жена и дочь. Я люблю слушать музыку, а ещё увлекаюсь
             бегом. Недавно начал кодить. С 2015 года работал в компании «СКБ
@@ -19,20 +19,12 @@ const AboutMe = () => {
           </p>
           <a
             href="https://github.com/Akhtool"
-            className="about-me__github"
-            target="_blank"
-            rel="noreferrer"
+            className="about-me__github-link"
           >
             Github
           </a>
         </div>
-        <div className="about-me__photo-wrapper">
-          <img
-            className="about-me__photo"
-            src={studentPhoto}
-            alt="Фотограция студента"
-          />
-        </div>
+        <img className="about-me__img" src={photo} alt="Фото студента" />
       </div>
     </section>
   );

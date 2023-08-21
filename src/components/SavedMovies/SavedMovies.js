@@ -8,6 +8,10 @@ import { movieFilter } from '../../utils/utils';
 import { useSavedMoviesContext } from '../../contexts/SavedMoviesContextProvider';
 import Modal from '../Modal/Modal';
 import ModalContent from '../Modal/ModalContent';
+// SavedMovies — компонент страницы с сохранёнными карточками фильмов. Пригодятся эти компоненты:
+// MoviesCardList — компонент, который управляет отрисовкой карточек фильмов на страницу и
+// их количеством.
+// MoviesCard — компонент одной карточки фильма.
 
 const SavedMovies = () => {
   const [isLoadind, setIsLoading] = useState(false);

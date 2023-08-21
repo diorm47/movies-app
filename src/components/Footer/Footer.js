@@ -1,32 +1,30 @@
 import "./Footer.css";
-
-const Footer = () => {
+// Footer — презентационный компонент, который отрисовывает подвал.
+const Footer = (props) => {
   return (
-    <footer className="footer container">
-      <div className="footer__top">
-        <p className="footer__text">
-          Учебный проект Яндекс.Практикум х BeatFilm.
-        </p>
-      </div>
-      <div className="footer__bottom">
-        <p className="footer__coryright">&copy; {new Date().getFullYear()}</p>
+    <footer className="footer">
+      <h2 className="footer__title">
+        Учебный проект Яндекс.Практикум х BeatFilm.
+      </h2>
+      <div className="footer__container">
+        <p className="footer__date">© 2023</p>
         <ul className="footer__list">
-          <li className="footer__list-item">
+          <li>
             <a
-              className="footer__link"
               href="https://practicum.yandex.ru/"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
+              className="footer__link"
             >
               Яндекс.Практикум
             </a>
           </li>
-          <li className="footer__list-item">
+          <li>
             <a
-              className="footer__link"
               href="https://github.com/Akhtool"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
+              className="footer__link"
             >
               Github
             </a>

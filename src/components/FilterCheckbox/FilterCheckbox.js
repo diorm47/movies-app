@@ -2,17 +2,17 @@ import "./FilterCheckbox.css";
 
 const FilterCheckbox = ({ checkHandler, isChecked }) => {
   return (
-    <label className="checkbox">
-      <input
-        type="checkbox"
-        name="shorts"
-        className="checkbox__element checkbox__element_type_real"
-        checked={isChecked}
-        onChange={checkHandler}
-      />
-      <span className="checkbox__element checkbox__element_type_custom" />
-      Короткометражки
-    </label>
+    <div className="filter-checkbox">
+      <div className="filter-checkbox__container">
+        <input
+          type="checkbox"
+          className="filter-checkbox__input"
+          checked={isChecked}
+          onChange={checkHandler}
+        />
+        <span className="filter-checkbox__text">Короткометражки</span>
+      </div>
+    </div>
   );
 };
 

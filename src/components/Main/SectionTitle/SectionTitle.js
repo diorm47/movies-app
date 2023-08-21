@@ -1,11 +1,7 @@
-import './SectionTitle.css';
+import "./SectionTitle.css";
 
-const SectionTitle = ( {children} ) => {
-  return (
-    <h2 className="section-title">
-      { children }
-    </h2>
-  )
-};
+function SectionTitle({ title }) {
+  return <h2 className="section-title">{title}</h2>;
+}
 
 export default SectionTitle;

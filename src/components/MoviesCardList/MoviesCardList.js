@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css'
-
+// MoviesCardList — компонент, который управляет отрисовкой карточек фильмов на страницу и их количеством.
 const MoviesCardList = ({ moviesData, isAlreadySeached }) => {
   const { pathname } = useLocation();
 
