@@ -1,13 +1,12 @@
-import { useLocation } from 'react-router-dom';
-import { convertDuration } from '../../utils/utils';
-import MovieCardButton from './MovieCardButton/MovieCardButton';
-import './MoviesCard.css';
-import { MOVIES_IMAGES_BASE_URL } from '../../constants/constants';
-import { mainApi } from '../../utils/MainApi';
-import { useSavedMoviesContext } from '../../contexts/SavedMoviesContextProvider';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { MOVIES_IMAGES_BASE_URL } from '../../constants/constants';
+import { useSavedMoviesContext } from '../../contexts/SavedMoviesContextProvider';
+import { mainApi } from '../../utils/MainApi';
 import Modal from '../Modal/Modal';
 import ModalContent from '../Modal/ModalContent';
+import MovieCardButton from './MovieCardButton/MovieCardButton';
+import './MoviesCard.css';
 
 const MoviesCard = ({ movieData }) => {
   const { savedMovies, setSavedMovies } = useSavedMoviesContext();
@@ -68,7 +67,14 @@ const MoviesCard = ({ movieData }) => {
       <Modal isOpen={isModalOpened}>
         <ModalContent onClose={handleModalClose} modalText={modalText} />
       </Modal>
-
+      <div className="movie-card__description">
+        <h2 className="movie-card__name">
+          {movieData.nameRU}
+        </h2>
+        <span className="movie-card__duration">
+        {movieData.duration} минут
+        </span>
+      </div>
       <a
         className="movie-card__trailer"
         href={movieData.trailerLink}
@@ -92,14 +98,7 @@ const MoviesCard = ({ movieData }) => {
       >
         {pathname === "/movies" ? 'Сохранить' : 'X'}
       </MovieCardButton>
-      <div className="movie-card__description">
-        <h2 className="movie-card__name">
-          {movieData.nameRU}
-        </h2>
-        <span className="movie-card__duration">
-          {convertDuration(+movieData.duration)}
-        </span>
-      </div>
+  
     </li>
   )
 };
