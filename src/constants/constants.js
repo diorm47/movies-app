@@ -1,0 +1,11 @@
+export const MOVIES_IMAGES_BASE_URL = 'https://api.nomoreparties.co';
+export const MOBILE_SCREEN_WIDTH = 600;
+export const TABLET_SCREEN_WIDTH = 900;
+export const DESKTOP_CARDS_AMOUNT = {totalCards: 12, extraCards: 3};
+export const TABLET_CARDS_AMOUNT = {totalCards: 8, extraCards: 2};
+export const MOBILE_CARDS_AMOUNT = {totalCards: 5, extraCards: 2};
+export const MESSAGE_API_PROFILE_SUCCESS = 'Данные профиля успешно обновлены';
+export const MESSAGE_MOVIESAPI_GETFILMS_FAIL = 'Не удалось получить данные фильмов';
+export const MESSAGE_EMPTY_QUERRY = 'Нужно ввести ключевое слово';
+export const SHORTS_DURATION = 40;
+export const PATTERN_EMAIL = '[a-zA-Z0-9_.]+@[a-zA-Z0-9_]+\\.{1,1}[a-z]{2,}';

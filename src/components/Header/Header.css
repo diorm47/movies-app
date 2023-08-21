@@ -1,0 +1,23 @@
+.header {
+  padding: 18px calc((100% - 1140px) / 2);
+  display: flex;
+  gap: 44px;
+}
+
+.header_type_promo {
+  background-color: var(--promo-bg-color);
+}
+
+@media screen and (max-width: 1200px) {
+  .header {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .header {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}

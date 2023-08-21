@@ -1,0 +1,146 @@
+.about {
+  padding: 110px 0 110px;
+}
+
+.about__plan {
+  margin-top: 70px;
+  display: flex;
+  gap: 40px;
+}
+
+.about__subtitle {
+  margin: 0;
+  margin-bottom: 26px;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+}
+
+.about__text {
+  margin: 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.49;
+}
+
+.about__progress {
+  width: 100%;
+  margin-top: 110px;
+  display: flex;
+}
+
+.about__week {
+  text-align: center;
+}
+
+.about__week_type_first {
+  flex-basis: 228px;
+}
+
+.about__week_type_other {
+  flex-grow: 1;
+  flex-basis: calc(100%-228px);
+}
+
+.about__week-lasts {
+  display: block;
+  padding: 9px 0 9px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.about__week-lasts_type_first {
+  color: #000;
+  background-color: #3ddc84;
+}
+
+.about__week-lasts_type_other {
+  color: #fff;
+  background-color: #303030;
+}
+
+.about__week-title {
+  display: block;
+  margin-top: 14px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #8b8b8b;
+}
+
+@media screen and (max-width: 1200px) {
+  .about {
+    padding: 90px 30px 90px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .about {
+    padding: 90px 50px 90px;
+  }
+
+  .about__subtitle {
+    line-height: 1;
+  }
+
+  .about__text {
+    font-size: 12px;
+  }
+
+  .about__plan {
+    gap: 30px;
+  }
+
+  .about__progress {
+    margin-top: 93px;
+  }
+
+  .about__week_type_first {
+    flex-basis: 21%;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .about {
+    padding: 70px 18px 70px;
+  }
+
+  .about__subtitle {
+    line-height: 1.2;
+  }
+
+  .about__text {
+    font-size: 11px;
+  }
+
+  .about__plan {
+    margin-top: 60px;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .about__progress {
+    margin-top: 55px;
+  }
+
+  .about__subtitle {
+    margin-bottom: 16px;
+    font-size: 18px;
+    letter-spacing: -0.72px;
+  }
+
+  .about__week_type_first {
+    flex-basis: 35%;
+  }
+
+  .about__week-lasts {
+    font-size: 11px;
+  }
+
+  .about__week-title {
+    margin-top: 10px;
+    font-size: 11px;
+  }
+}

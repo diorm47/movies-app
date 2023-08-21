@@ -1,0 +1,21 @@
+@import url(./vendor/normalize.css);
+@import url(./vendor/fonts/inter/inter.css);
+
+:root {
+  --main-bg-color: #202020;
+  --promo-bg-color: #073042;
+  --teach-nav-bg-color: #272727;
+  --logo-color: #3ddc84;
+  --main-text-color: #fff;
+  --gray-text-color: #8b8b8b;
+  --max-content-width: 1140px;
+}
+
+.page {
+  background-color: var(--main-bg-color);
+}
+
+.container {
+  margin: 0 auto;
+  max-width: var(--max-content-width);
+}
