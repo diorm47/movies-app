@@ -6,111 +6,100 @@ const mainApiOptions = {
 };
 
 class MainApi {
-  constructor(options) {
-    this._baseUrl = options.baseUrl;
-    this._headers = options.headers;
+  constructor({ baseUrl, headers }) {
+    this._baseUrl = baseUrl;
+    this._headers = headers;
   }
 
-  // Проверяем статус ответа сервера:
   _checkResponseStatus(response) {
     return response.ok
       ? response.json()
       : response.json().then((err) => Promise.reject(err.message));
   }
 
-  async signup(userData) {
-    const res = await fetch(`${this._baseUrl}/signup`, {
-      method: "POST",
-      headers: this._headers,
-      body: JSON.stringify(userData),
+  async _sendRequest({
+    endpoint,
+    method = "GET",
+    body,
+    requiresToken = false,
+  }) {
+    const headers = { ...this._headers };
+
+    if (requiresToken) {
+      headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+    }
+
+    const res = await fetch(`${this._baseUrl}${endpoint}`, {
+      method,
+      headers,
+      body: JSON.stringify(body),
+      credentials: "include",
     });
+
     return this._checkResponseStatus(res);
+  }
+
+  async signup(userData) {
+    return this._sendRequest({
+      endpoint: "/signup",
+      method: "POST",
+      body: userData,
+    });
   }
 
   async signin(userData) {
-    const res = await fetch(`${this._baseUrl}/signin`, {
+    return this._sendRequest({
+      endpoint: "/signin",
       method: "POST",
-      credentials: "include",
-      headers: this._headers,
-      body: JSON.stringify(userData),
+      body: userData,
     });
-    return this._checkResponseStatus(res);
   }
 
   async reEnter() {
-    const res = await fetch(`${this._baseUrl}/users/me`, {
-      method: "GET",
-      credentials: "include",
-
-      headers: {
-        ...this._headers,
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+    return this._sendRequest({
+      endpoint: "/users/me",
+      requiresToken: true,
     });
-    return this._checkResponseStatus(res);
   }
 
   async editUserData(userData) {
-    const res = await fetch(`${this._baseUrl}/users/me`, {
+    return this._sendRequest({
+      endpoint: "/users/me",
       method: "PATCH",
-      credentials: "include",
-      headers: {
-        ...this._headers,
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(userData),
+      body: userData,
+      requiresToken: true,
     });
-    return this._checkResponseStatus(res);
   }
 
   async logoutUser() {
-    const res = await fetch(`${this._baseUrl}/signout`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        ...this._headers,
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+    return this._sendRequest({
+      endpoint: "/signout",
+      requiresToken: true,
     });
-    return this._checkResponseStatus(res);
   }
 
-  // Фильмы
   async getSavedMovies() {
-    const res = await fetch(`${this._baseUrl}/movies`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        ...this._headers,
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+    return this._sendRequest({
+      endpoint: "/movies",
+      requiresToken: true,
     });
-    return this._checkResponseStatus(res);
   }
 
   async saveMovie(movieData) {
-    const res = await fetch(`${this._baseUrl}/movies`, {
+    return this._sendRequest({
+      endpoint: "/movies",
       method: "POST",
-      credentials: "include",
-      headers: {
-        ...this._headers,
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(movieData),
+      body: movieData,
+      requiresToken: true,
     });
-    return this._checkResponseStatus(res);
   }
 
   async deleteMovie(movieId) {
-    const res = await fetch(`${this._baseUrl}/movies/${movieId}`, {
+    return this._sendRequest({
+      endpoint: `/movies/${movieId}`,
       method: "DELETE",
-      credentials: "include",
-      headers: {
-        ...this._headers,
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+      requiresToken: true,
     });
-    return this._checkResponseStatus(res);
   }
 }
 

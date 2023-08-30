@@ -1,7 +1,7 @@
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 
-const Layout = ({ children, ...props }) => {
+const MainLayout = ({ children, ...props }) => {
   return (
     <>
       <Header isLogged={props.isLogged} />
@@ -11,4 +11,4 @@ const Layout = ({ children, ...props }) => {
   );
 };
 
-export default Layout;
+export default MainLayout;

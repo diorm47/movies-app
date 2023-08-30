@@ -1,4 +1,4 @@
-import { MESSAGE_MOVIESAPI_GETFILMS_FAIL } from "../constants/constants";
+import { FILMS_FETCH_FAILURE_MESSAGE } from "../constants/constants";
 
 const apiOptions = {
   baseUrl: "https://api.nomoreparties.co/beatfilm-movies",
@@ -8,9 +8,9 @@ const apiOptions = {
 };
 
 class MoviesApi {
-  constructor(options) {
-    this._baseUrl = options.baseUrl;
-    this._headers = options.headers;
+  constructor({ baseUrl, headers }) {
+    this._baseUrl = baseUrl;
+    this._headers = headers;
   }
 
   _checkResponseStatus(response, message) {
@@ -19,12 +19,19 @@ class MoviesApi {
       : Promise.reject(`${response.status}: ${message}`);
   }
 
-  async getAllMovies() {
-    const res = await fetch(this._baseUrl, {
-      method: "GET",
+  async _sendRequest({ endpoint = "", method = "GET", message = "" }) {
+    const res = await fetch(`${this._baseUrl}${endpoint}`, {
+      method,
       headers: this._headers,
     });
-    return this._checkResponseStatus(res, MESSAGE_MOVIESAPI_GETFILMS_FAIL);
+
+    return this._checkResponseStatus(res, message);
+  }
+
+  async getAllMovies() {
+    return this._sendRequest({
+      message: FILMS_FETCH_FAILURE_MESSAGE,
+    });
   }
 }
 

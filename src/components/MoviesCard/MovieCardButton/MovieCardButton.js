@@ -1,7 +1,7 @@
-import './MovieCardButton.css';
+import "./MovieCardButton.css";
 
 const MovieCardButton = ({ onClickHandler, typeClass, children }) => {
-  const buttonModificator = typeClass ? 'movie-card__button_type_like' : '';
+  const buttonModificator = typeClass ? "movie-card__button_type_like" : "";
 
   return (
     <button
@@ -9,9 +9,9 @@ const MovieCardButton = ({ onClickHandler, typeClass, children }) => {
       type="button"
       onClick={onClickHandler}
     >
-      {typeClass ? '' : children}
+      {typeClass ? "" : children}
     </button>
-  )
+  );
 };
 
 export default MovieCardButton;

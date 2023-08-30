@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom";
 import './LoggedUserNavigation.css';
 
-const LoggedUserNavigation = ({ isBurger = false }) => {
+const LoggedUserNavigation = ({ isMobBurger = false }) => {
   return (
     <>
       <ul className="navigation__list">
-        { isBurger &&
+        {isMobBurger &&
           <li className="navigation__item">
             <NavLink to="/" className="navigation__link navigation__link_type_home">Гравная</NavLink>
           </li>
@@ -37,7 +37,7 @@ const LoggedUserNavigation = ({ isBurger = false }) => {
         activeclassname="active"
       >
         Аккаунт
-        <div class="header__nav-profile-logo"></div>
+        <div className="header__nav-profile-logo"></div>
       </NavLink>
     </>
   )

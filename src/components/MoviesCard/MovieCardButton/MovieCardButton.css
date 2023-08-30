@@ -16,11 +16,11 @@
 
 .movie-card__button_type_like {
   background-color: #ee3465;
-  background-image: url('../../../images/save.svg');
+  background-image: url("../../../images/save.svg");
   background-position: center;
   background-repeat: no-repeat;
 }
 
 .movie-card__button:hover {
-  opacity: .8;
+  opacity: 0.8;
 }

@@ -1,36 +1,42 @@
-import { useEffect, useState } from 'react';
-import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
-import './SearchForm.css'
-import { MESSAGE_EMPTY_QUERRY } from '../../constants/constants';
+import { useEffect, useState } from "react";
+import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
+import "./SearchForm.css";
+import { EMPTY_SEARCH_QUERY_MESSAGE } from "../../constants/constants";
 // SearchForm — форма поиска, куда пользователь будет вводить запрос.
 // Обратите внимание на фильтр с чекбоксом «Только короткометражки».
 // Для него можно воспользоваться отдельным управляемым компонентом FilterCheckbox.
-const SearchForm = ({ searchParams, handleSubmit, setSearchParams, isRequired = true, isEmptyQuerry }) => {
+const SearchForm = ({
+  searchParams,
+  handleSubmit,
+  setSearchParams,
+  isRequired = true,
+  isEmptyQuerry,
+}) => {
   const [searchValue, setSearchValue] = useState(searchParams.querry);
-  const [isShortsChecked, setIsShortsChecked] = useState(searchParams.includeShorts);
+  const [isShortsChecked, setIsShortsChecked] = useState(
+    searchParams.includeShorts
+  );
 
   const handleChange = ({ target }) => {
     setSearchValue(target.value);
-  }
+  };
 
   const handleShortsCheck = () => {
     setIsShortsChecked(!isShortsChecked);
-    setSearchParams({...searchParams, includeShorts: !searchParams.includeShorts});
-  }
+    setSearchParams({
+      ...searchParams,
+      includeShorts: !searchParams.includeShorts,
+    });
+  };
 
   useEffect(() => {
     setSearchValue(searchParams.querry);
     setIsShortsChecked(searchParams.includeShorts);
-  }, [searchParams])
+  }, [searchParams]);
 
   return (
     <section className="search">
-      <form
-        className="search__form"
-        onSubmit={handleSubmit}
-        noValidate
-
-      >
+      <form className="search__form" onSubmit={handleSubmit} noValidate>
         <fieldset className="search__request">
           <input
             className="search__input"
@@ -41,17 +47,13 @@ const SearchForm = ({ searchParams, handleSubmit, setSearchParams, isRequired = 
             value={searchValue}
             required={isRequired}
           />
-          <button
-            className="search__submit"
-            type="submit"
-            >Поиск</button>
-          
+          <button className="search__submit" type="submit">
+            Поиск
+          </button>
         </fieldset>
 
         <span className="search__error-message">
-          {
-            isEmptyQuerry ? MESSAGE_EMPTY_QUERRY : ""
-          }
+          {isEmptyQuerry ? EMPTY_SEARCH_QUERY_MESSAGE : ""}
         </span>
 
         <FilterCheckbox
@@ -60,7 +62,7 @@ const SearchForm = ({ searchParams, handleSubmit, setSearchParams, isRequired = 
         />
       </form>
     </section>
-  )
+  );
 };
 
 export default SearchForm;

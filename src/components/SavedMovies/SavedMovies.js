@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 import Preloader from '../Preloader/Preloader';
 import { mainApi } from '../../utils/MainApi';
 import { movieFilter } from '../../utils/utils';
-import { useSavedMoviesContext } from '../../contexts/SavedMoviesContextProvider';
-import Modal from '../Modal/Modal';
+import { useBookmarkedMovies } from '../../contexts/BookmarkedMoviesProvider';
+import ModalOverlay from '../Modal/ModalOverlay';
 import ModalContent from '../Modal/ModalContent';
 // SavedMovies — компонент страницы с сохранёнными карточками фильмов. Пригодятся эти компоненты:
 // MoviesCardList — компонент, который управляет отрисовкой карточек фильмов на страницу и
@@ -15,7 +15,7 @@ import ModalContent from '../Modal/ModalContent';
 
 const SavedMovies = () => {
   const [isLoadind, setIsLoading] = useState(false);
-  const { savedMovies, setSavedMovies } = useSavedMoviesContext();
+  const { savedMovies, setSavedMovies } = useBookmarkedMovies();
   const [searchedSavedMovies, setSearchedSavedMovies] = useState([]);
   const [searchParams, setSearchParams] = useState({querry: '', includeShorts: false, alreadySeached: false});
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -56,9 +56,9 @@ const SavedMovies = () => {
   return (
     <main className="saved-movies container">
 
-      <Modal isOpen={isModalOpened}>
+      <ModalOverlay isModalOpened={isModalOpened}>
         <ModalContent onClose={handleModalClose} modalText={modalText} />
-      </Modal>
+      </ModalOverlay>
 
       <SearchForm
         searchParams={searchParams}

@@ -1,110 +1,125 @@
-import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import SearchForm from '../SearchForm/SearchForm';
-import './Movies.css';
-import { useEffect, useState } from 'react';
-import Preloader from '../Preloader/Preloader';
-import { moviesApi } from '../../utils/MoviesApi';
-import { getCardsAmount, movieFilter } from '../../utils/utils';
-import { useDebouncedFunction } from '../../hooks/useDebouncedFunction';
-import { useSavedMoviesContext } from '../../contexts/SavedMoviesContextProvider';
-import { mainApi } from '../../utils/MainApi';
-import Modal from '../Modal/Modal';
-import ModalContent from '../Modal/ModalContent';
+import { useEffect, useState } from "react";
+import { useBookmarkedMovies } from "../../contexts/BookmarkedMoviesProvider";
+import { useDelayedFunction } from "../../hooks/useDelayedFunction";
+import { mainApi } from "../../utils/MainApi";
+import { moviesApi } from "../../utils/MoviesApi";
+import { getCardsAmount, movieFilter } from "../../utils/utils";
+import ModalContent from "../Modal/ModalContent";
+import ModalOverlay from "../Modal/ModalOverlay";
+import MoviesCardList from "../MoviesCardList/MoviesCardList";
+import Preloader from "../Preloader/Preloader";
+import SearchForm from "../SearchForm/SearchForm";
+import "./Movies.css";
 // Movies — компонент страницы с поиском по фильмам. В нём пригодятся эти компоненты:
 // SearchForm — форма поиска, куда пользователь будет вводить запрос. Обратите внимание на фильтр с чекбоксом «Только короткометражки». Для него можно воспользоваться отдельным управляемым компонентом FilterCheckbox.
 // Preloader — отвечает за работу прелоадера.
 // MoviesCardList — компонент, который управляет отрисовкой карточек фильмов на страницу и их количеством.
 // MoviesCard — компонент одной карточки фильма.
 
-
 const Movies = () => {
-  const [isLoadind, setIsLoading] = useState(false);
-  const [allMovies, setAllMovies] = useState([]);
-  const [displayedMovies, setDisplayedMovies] = useState([]);
-  const [cardsAmount, setCardsAmount] = useState(getCardsAmount());
-  const [isMoveButtonVisible, setIsMoveButtonVisible] = useState(true);
-  const [searchParams, setSearchParams] = useState({querry: '', includeShorts: false, alreadySeached: false});
+  const [searchParams, setSearchParams] = useState({
+    querry: "",
+    includeShorts: false,
+    alreadySeached: false,
+  });
+  const [isLoading, setLoadingStatus] = useState(false);
+  const [movieList, updateMovieList] = useState([]);
+  const [shownMovies, updateShownMovies] = useState([]);
+  const [amountOfCards, updateAmountOfCards] = useState(getCardsAmount());
+  const [moreBtnVisibility, updateMoreBtnVisibility] = useState(true);
   const [serachedMovies, setSearchedMovies] = useState([]);
-  const { setSavedMovies } = useSavedMoviesContext();
+  const {setSavedMovies } = useBookmarkedMovies();
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [modalText, setModalText] = useState('');
+  const [modalText, setModalText] = useState("");
   const [isEmptyQuerry, setIsEmptyQuerry] = useState(false);
+
+  useEffect(() => {
+    setLoadingStatus(true);
+    mainApi
+      .getSavedMovies()
+      .then((res) => {
+        setSavedMovies(res);
+      })
+      .catch((err) => {
+        setIsModalOpened(true);
+        setModalText(err);
+      })
+      .finally(() => {
+        setLoadingStatus(false);
+      });
+  }, [setSavedMovies]);
+  useEffect(() => {
+    if (!searchParams.querry) return;
+
+    const currentSearchedMovies = movieList.filter((movie) =>
+      movieFilter(movie, searchParams)
+    );
+    setSearchedMovies(currentSearchedMovies);
+  }, [searchParams, movieList]);
+
+  const handleResize = () => {
+    updateAmountOfCards(getCardsAmount());
+  };
+
+  const debouncedResize = useDelayedFunction(handleResize);
 
   const handleModalClose = () => {
     setIsModalOpened(false);
-    setModalText('');
-  }
+    setModalText("");
+  };
 
   useEffect(() => {
-    setIsLoading(true);
-    mainApi.getSavedMovies()
-      .then(res => {
-        setSavedMovies(res);
-      })
-      .catch(err => {
-        setIsModalOpened(true);
-        setModalText(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      })
-  }, [setSavedMovies])
+    window.addEventListener("resize", debouncedResize);
 
-  const handleResize = () => {
-    setCardsAmount(getCardsAmount());
-  }
-
-  const debouncedResize = useDebouncedFunction(handleResize);
-
-  useEffect(() => {
-    window.addEventListener('resize', debouncedResize);
-
-    return () => window.removeEventListener('resize', debouncedResize);
+    return () => window.removeEventListener("resize", debouncedResize);
   }, [debouncedResize]);
 
-
   useEffect(() => {
-    const search = JSON.parse(localStorage.getItem('search'));
+    const search = JSON.parse(localStorage.getItem("search"));
     if (search) setSearchParams(search);
 
-    const storageMovies = JSON.parse(localStorage.getItem('movies'));
+    const storageMovies = JSON.parse(localStorage.getItem("movies"));
     if (storageMovies) {
-      setAllMovies(storageMovies);
+      updateMovieList(storageMovies);
       return;
     }
 
-    setIsLoading(true);
-    moviesApi.getAllMovies()
-      .then(movies => {
-        setAllMovies(movies);
-        localStorage.setItem('movies', JSON.stringify(movies));
+    setLoadingStatus(true);
+    moviesApi
+      .getAllMovies()
+      .then((movies) => {
+        updateMovieList(movies);
+        localStorage.setItem("movies", JSON.stringify(movies));
       })
-      .catch(err => {
+      .catch((err) => {
         setIsModalOpened(true);
         setModalText(err);
       })
       .finally(() => {
-        setIsLoading(false);
-      })
-  }, [])
+        setLoadingStatus(false);
+      });
+  }, []);
 
   useEffect(() => {
-    setDisplayedMovies(serachedMovies.slice(0, cardsAmount.totalCards));
-  }, [cardsAmount, serachedMovies])
+    updateShownMovies(serachedMovies.slice(0, amountOfCards.totalCards));
+  }, [amountOfCards, serachedMovies]);
 
-  const handleMoreMovies = () => {
-    const moviesToShow = serachedMovies.slice(displayedMovies.length, displayedMovies.length + cardsAmount.extraCards);
+  const handleMoreButtonClick = () => {
+    const moviesToShow = serachedMovies.slice(
+      shownMovies.length,
+      shownMovies.length + amountOfCards.extraCards
+    );
 
-    setDisplayedMovies([...displayedMovies, ...moviesToShow]);
-  }
+    updateShownMovies([...shownMovies, ...moviesToShow]);
+  };
 
   useEffect(() => {
-    setIsMoveButtonVisible(displayedMovies.length < serachedMovies.length);
-  }, [displayedMovies, serachedMovies])
+    updateMoreBtnVisibility(shownMovies.length < serachedMovies.length);
+  }, [shownMovies, serachedMovies]);
 
   const handleSearchSubmit = (evt) => {
     evt.preventDefault();
-    const {querry, shorts} = evt.target.elements;
+    const { querry, shorts } = evt.target.elements;
 
     if (!querry.value) {
       setIsEmptyQuerry(true);
@@ -113,25 +128,17 @@ const Movies = () => {
 
     setIsEmptyQuerry(false);
 
-    const currentSearch = {querry: querry.value, includeShorts: shorts.checked, alreadySeached: true};
-    localStorage.setItem('search', JSON.stringify(currentSearch));
+    const currentSearch = {
+      querry: querry.value,
+      includeShorts: shorts.checked,
+      alreadySeached: true,
+    };
+    localStorage.setItem("search", JSON.stringify(currentSearch));
     setSearchParams(currentSearch);
-  }
-
-  useEffect(() => {
-    if (!searchParams.querry) return;
-
-    const currentSearchedMovies = allMovies.filter(movie => movieFilter(movie, searchParams));
-    setSearchedMovies(currentSearchedMovies);
-  }, [searchParams, allMovies])
+  };
 
   return (
     <main className="movies container">
-
-      <Modal isOpen={isModalOpened}>
-        <ModalContent onClose={handleModalClose} modalText={modalText} />
-      </Modal>
-
       <SearchForm
         searchParams={searchParams}
         handleSubmit={handleSearchSubmit}
@@ -139,28 +146,30 @@ const Movies = () => {
         isEmptyQuerry={isEmptyQuerry}
       />
 
-      {isLoadind
-        ? <Preloader />
-        : <MoviesCardList
-            moviesData={displayedMovies}
-            isAlreadySeached={searchParams.alreadySeached}
-          />
-      }
+      <ModalOverlay isModalOpened={isModalOpened}>
+        <ModalContent onClose={handleModalClose} modalText={modalText} />
+      </ModalOverlay>
 
-      {
-        isMoveButtonVisible
-          ? <button
-              className="movies__more"
-              type="button"
-              onClick={handleMoreMovies}
-            >
-              Ещё
-            </button>
-          : null
-      }
+      {isLoading ? (
+        <Preloader />
+      ) : (
+        <MoviesCardList
+          moviesData={shownMovies}
+          isAlreadySeached={searchParams.alreadySeached}
+        />
+      )}
 
+      {moreBtnVisibility ? (
+        <button
+          className="movies__more"
+          type="button"
+          onClick={handleMoreButtonClick}
+        >
+          Ещё
+        </button>
+      ) : null}
     </main>
-  )
+  );
 };
 
 export default Movies;

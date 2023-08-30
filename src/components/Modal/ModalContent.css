@@ -1,4 +1,4 @@
-.modal__container {
+.modal__wrapper {
   background-color: #fff;
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
@@ -32,11 +32,11 @@
   transform: translate(100%, -100%);
   cursor: pointer;
   opacity: 1;
-  transition: .2s ease-in-out;
+  transition: 0.2s ease-in-out;
 }
 
 .modal__close:hover {
-  opacity: .7;
+  opacity: 0.7;
 }
 
 .modal__image {

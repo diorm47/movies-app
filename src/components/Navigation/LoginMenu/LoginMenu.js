@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import './LoginRegisterMenu.css';
+import './LoginMenu.css';
 
-const LoginRegisterMenu = () => {
+const LoginMenu = () => {
   const navigate = useNavigate();
 
   return (
@@ -28,4 +28,4 @@ const LoginRegisterMenu = () => {
   )
 };
 
-export default LoginRegisterMenu;
+export default LoginMenu;

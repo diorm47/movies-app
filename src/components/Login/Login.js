@@ -1,33 +1,38 @@
 import "./Login.css";
-import Logo from "../Logo/Logo";
-import { useFormWithValidation } from "../../hooks/useFormWithValidation";
-import { Link, useNavigate } from "react-router-dom";
+import { ReactComponent as Logo } from "../../images/logo.svg";
+import { useCustomFormValidation } from "../../hooks/useCustomFormValidation";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { mainApi } from "../../utils/MainApi";
-import { useCurrentUserContext } from "../../contexts/CurrentUserContextProvider";
+import { useUserDetails } from "../../contexts/UserDataProvider";
 import { useState } from "react";
 import Preloader from "../Preloader/Preloader";
-import { PATTERN_EMAIL } from "../../constants/constants";
+import { EMAIL_REGEX_PATTERN } from "../../constants/constants";
 
 const Login = ({ setLoginStatus }) => {
-  const { setCurrentUser } = useCurrentUserContext();
-  const { values, handleChange, errors, isValid, resetForm, inputVilidities } =
-    useFormWithValidation();
+  const { setCurrentUser } = useUserDetails();
+  const {
+    values,
+    handleInputChange,
+    errors,
+    isFormValid,
+    resetForm,
+    inputStatuses,
+  } = useCustomFormValidation();
   const navigate = useNavigate();
-  const [apiErrorMessage, setApiErrorMessage] = useState("");
-  const [isLoadind, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+  const [isLoading, setLoaderStatus] = useState(false);
 
-  const handleSubmit = (evt) => {
+  const handleFormSubmit = (evt) => {
     evt.preventDefault();
-    setApiErrorMessage("");
+    setApiError("");
 
-    setIsLoading(true);
+    setLoaderStatus(true);
     mainApi
       .signin(values)
       .then((userData) => {
         localStorage.setItem("token", userData.token);
         setCurrentUser(userData);
         setLoginStatus(true);
-        localStorage.setItem("currentId", userData._id);
         resetForm();
         navigate("/movies", { replace: true });
       })
@@ -37,30 +42,32 @@ const Login = ({ setLoginStatus }) => {
         });
       })
       .catch((err) => {
-        setApiErrorMessage(err);
+        setApiError(err);
       })
       .finally(() => {
-        setIsLoading(false);
+        setLoaderStatus(false);
       });
   };
 
   return (
     <main className="auth container login_form">
-      <Logo />
+      <NavLink to="/" className="login__link">
+        <Logo />
+      </NavLink>
       <h1 className="auth__title">Рады видеть!</h1>
       <form
         action="#"
         className="auth__form"
         name="login"
         noValidate
-        onSubmit={handleSubmit}
+        onSubmit={handleFormSubmit}
       >
         <label htmlFor="email" className="auth__field">
           E-mail
           <input
             type="email"
             className={
-              inputVilidities.email === undefined || inputVilidities.email
+              inputStatuses.email === undefined || inputStatuses.email
                 ? "auth__input"
                 : "auth__input auth__input_type_error"
             }
@@ -70,9 +77,9 @@ const Login = ({ setLoginStatus }) => {
             autoComplete="off"
             minLength="2"
             maxLength="40"
-            onChange={handleChange}
+            onChange={handleInputChange}
             value={values.email || ""}
-            pattern={PATTERN_EMAIL}
+            pattern={EMAIL_REGEX_PATTERN}
           />
           <span className="auth__error">{errors.email}</span>
         </label>
@@ -81,7 +88,7 @@ const Login = ({ setLoginStatus }) => {
           <input
             type="password"
             className={
-              inputVilidities.password === undefined || inputVilidities.password
+              inputStatuses.password === undefined || inputStatuses.password
                 ? "auth__input"
                 : "auth__input auth__input_type_error"
             }
@@ -91,25 +98,25 @@ const Login = ({ setLoginStatus }) => {
             autoComplete="off"
             minLength="2"
             maxLength="200"
-            onChange={handleChange}
+            onChange={handleInputChange}
             value={values.password || ""}
           />
           <span className="auth__error">{errors.password}</span>
         </label>
 
-        <span className="auth__api-error">{apiErrorMessage}</span>
+        <span className="auth__api-error">{apiError}</span>
 
-        {isLoadind ? (
+        {isLoading ? (
           <Preloader />
         ) : (
           <button
             className={
-              isValid
+              isFormValid
                 ? "register__submit"
                 : "register__submit register__submit_disabled"
             }
             type="submit"
-            disabled={!isValid}
+            disabled={!isFormValid}
           >
             Войти
           </button>

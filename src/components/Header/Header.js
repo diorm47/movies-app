@@ -1,7 +1,7 @@
 import "./Header.css";
-import Logo from "../Logo/Logo";
 import Navigation from "../Navigation/Navigation";
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import { ReactComponent as Logo } from "../../images/logo.svg";
 //Header — компонент, который отрисовывает шапку сайта на страницу. Шапка на главной странице, как и на
 //других страницах, должна менять отображение, если пользователь авторизован или не авторизован  Такое
 //поведение нужно сразу предусмотреть в вёрстке, даже несмотря на то, что сама авторизация ещё
@@ -14,7 +14,9 @@ const Header = ({ isLogged }) => {
     <header
       className={pathname === "/" ? "header header_type_promo" : "header"}
     >
-      <Logo />
+      <NavLink to="/" className="login__link">
+        <Logo />
+      </NavLink>
       <Navigation isLogged={isLogged} />
     </header>
   );

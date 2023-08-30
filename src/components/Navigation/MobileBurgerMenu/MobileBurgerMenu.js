@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
-import './BurgerMenu.css';
+import './MobileBurgerMenu.css';
 
-const BurgerMenu = ({ isOpened, closeBurger }) => {
+const MobileBurgerMenu = ({ isOpened, closeBurger }) => {
   return (
     <div className={isOpened ? "burger burger_opened" : "burger"}>
       <button
@@ -30,4 +30,4 @@ const BurgerMenu = ({ isOpened, closeBurger }) => {
   )
 };
 
-export default BurgerMenu;
+export default MobileBurgerMenu;

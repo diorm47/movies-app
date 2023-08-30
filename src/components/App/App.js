@@ -1,87 +1,85 @@
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { CurrentUserContextProvider } from "../../contexts/CurrentUserContextProvider";
-import { SavedMoviesContextProvider } from "../../contexts/SavedMoviesContextProvider";
+import { UserDataProvider } from "../../contexts/UserDataProvider";
+import { BookmarkedMoviesProvider } from "../../contexts/BookmarkedMoviesProvider";
 import { mainApi } from "../../utils/MainApi";
 import Header from "../Header/Header";
-import Layout from "../Layout/Layout";
+import MainLayout from "../MainLayout/MainLayout";
 import Login from "../Login/Login";
 import Main from "../Main/Main";
-import Modal from "../Modal/Modal";
+import ModalOverlay from "../Modal/ModalOverlay";
 import ModalContent from "../Modal/ModalContent";
 import Movies from "../Movies/Movies";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import Preloader from "../Preloader/Preloader";
 import Profile from "../Profile/Profile";
-import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import ProtectedRoute from "../../utils/ProtectedRoute";
 import Register from "../Register/Register";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import "./App.css";
 // App — корневой компонент приложения, его создаёт CRA.
 
 const App = () => {
-  const [isLogged, setIsLogged] = useState(false);
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState({ name: "", email: "" });
   const [savedMovies, setSavedMovies] = useState([]);
-  const [isTokenChecked, setIsTokenChecked] = useState(false);
-  const [isModalOpened, setIsModalOpened] = useState(false);
-  const [modalText, setModalText] = useState("");
+  const [tokenVerified, setTokenVerified] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
-  const handleModalClose = () => {
-    setIsModalOpened(false);
-    setModalText("");
+  const closeModalHandler = () => {
+    setModalVisible(false);
+    setModalMessage("");
   };
 
   useEffect(() => {
-    const id = localStorage.getItem("currentId");
-
-    if (id) {
+    if (localStorage.getItem("token")) {
       mainApi
         .reEnter()
         .then((userData) => {
           setCurrentUser(userData);
-          setIsLogged(true);
-        })
-        .catch((error) => {
-          setIsModalOpened(true);
-          setModalText(error);
+          setUserAuthenticated(true);
         })
         .finally(() => {
-          setIsTokenChecked(true);
+          setTokenVerified(true);
+        })
+        .catch((error) => {
+          setModalVisible(true);
+          setModalMessage(error.message || "Ошибка авторизации");
         });
     } else {
-      setIsTokenChecked(true);
-      setIsLogged(false);
+      setTokenVerified(true);
+      setUserAuthenticated(false);
     }
   }, []);
 
   return (
     <div className="app">
-      {isTokenChecked ? (
-        <CurrentUserContextProvider context={{ currentUser, setCurrentUser }}>
-          <SavedMoviesContextProvider context={{ savedMovies, setSavedMovies }}>
+      {tokenVerified ? (
+        <UserDataProvider context={{ currentUser, setCurrentUser }}>
+          <BookmarkedMoviesProvider context={{ savedMovies, setSavedMovies }}>
             <Routes>
               <Route
                 path="/"
                 element={
-                  <Layout isLogged={isLogged}>
+                  <MainLayout isLogged={userAuthenticated}>
                     <Main />
-                  </Layout>
+                  </MainLayout>
                 }
               />
               <Route
                 path="/signup"
                 element={
-                  <ProtectedRoute isLogged={!isLogged}>
-                    <Register setLoginStatus={setIsLogged} />
+                  <ProtectedRoute isLogged={!userAuthenticated}>
+                    <Register setLoginStatus={setUserAuthenticated} />
                   </ProtectedRoute>
                 }
               />
               <Route
                 path="/signin"
                 element={
-                  <ProtectedRoute isLogged={!isLogged}>
-                    <Login setLoginStatus={setIsLogged} />
+                  <ProtectedRoute isLogged={!userAuthenticated}>
+                    <Login setLoginStatus={setUserAuthenticated} />
                   </ProtectedRoute>
                 }
               />
@@ -89,20 +87,20 @@ const App = () => {
               <Route
                 path="/movies"
                 element={
-                  <ProtectedRoute isLogged={isLogged}>
-                    <Layout isLogged={isLogged}>
+                  <ProtectedRoute isLogged={userAuthenticated}>
+                    <MainLayout isLogged={userAuthenticated}>
                       <Movies />
-                    </Layout>
+                    </MainLayout>
                   </ProtectedRoute>
                 }
               />
               <Route
                 path="/saved-movies"
                 element={
-                  <ProtectedRoute isLogged={isLogged}>
-                    <Layout isLogged={isLogged}>
+                  <ProtectedRoute isLogged={userAuthenticated}>
+                    <MainLayout isLogged={userAuthenticated}>
                       <SavedMovies />
-                    </Layout>
+                    </MainLayout>
                   </ProtectedRoute>
                 }
               />
@@ -110,10 +108,10 @@ const App = () => {
               <Route
                 path="/profile"
                 element={
-                  <ProtectedRoute isLogged={isLogged}>
+                  <ProtectedRoute isLogged={userAuthenticated}>
                     <>
-                      <Header isLogged={isLogged} />
-                      <Profile setLoginStatus={setIsLogged} />
+                      <Header isLogged={userAuthenticated} />
+                      <Profile setLoginStatus={setUserAuthenticated} />
                     </>
                   </ProtectedRoute>
                 }
@@ -122,11 +120,14 @@ const App = () => {
               <Route path="/404" element={<NotFoundPage />} />
             </Routes>
 
-            <Modal isOpen={isModalOpened}>
-              <ModalContent onClose={handleModalClose} modalText={modalText} />
-            </Modal>
-          </SavedMoviesContextProvider>
-        </CurrentUserContextProvider>
+            <ModalOverlay isModalOpened={modalVisible}>
+              <ModalContent
+                onClose={closeModalHandler}
+                modalText={modalMessage}
+              />
+            </ModalOverlay>
+          </BookmarkedMoviesProvider>
+        </UserDataProvider>
       ) : (
         <div className="preloader-wrapper">
           <Preloader />

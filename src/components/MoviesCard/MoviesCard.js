@@ -1,83 +1,90 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { MOVIES_IMAGES_BASE_URL } from '../../constants/constants';
-import { useSavedMoviesContext } from '../../contexts/SavedMoviesContextProvider';
-import { mainApi } from '../../utils/MainApi';
-import Modal from '../Modal/Modal';
-import ModalContent from '../Modal/ModalContent';
-import MovieCardButton from './MovieCardButton/MovieCardButton';
-import './MoviesCard.css';
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { FILMS_BASE_URL } from "../../constants/constants";
+import { useBookmarkedMovies } from "../../contexts/BookmarkedMoviesProvider";
+import { mainApi } from "../../utils/MainApi";
+import ModalOverlay from "../Modal/ModalOverlay";
+import ModalContent from "../Modal/ModalContent";
+import ButtonInsideFilmCard from "./MovieCardButton/MovieCardButton";
+import "./MoviesCard.css";
 
-const MoviesCard = ({ movieData }) => {
-  const { savedMovies, setSavedMovies } = useSavedMoviesContext();
+const MoviesCard = ({ filmDetail }) => {
+  const { savedMovies, setSavedMovies } = useBookmarkedMovies();
   const { pathname } = useLocation();
-  const [isMovieSaved, setIsMovieSaved] = useState(false);
-  const [isModalOpened, setIsModalOpened] = useState(false);
-  const [modalText, setModalText] = useState('');
+  const [isFilmStored, setIsFilmStored] = useState(false);
+  const [isPopupShown, setIsPopupShown] = useState(false);
+  const [popupText, setPopupText] = useState("");
 
-  const handleModalClose = () => {
-    setIsModalOpened(false);
-    setModalText('');
-  }
+  const closeModalAction = () => {
+    setIsPopupShown(false);
+    setPopupText("");
+  };
 
   useEffect(() => {
-    setIsMovieSaved(savedMovies.some(movie => movie.movieId === movieData.id || movie.movieId === movieData.movieId));
-  }, [savedMovies, movieData])
+    setIsFilmStored(
+      savedMovies.some(
+        (film) =>
+          film.movieId === filmDetail.id || film.movieId === filmDetail.movieId
+      )
+    );
+  }, [savedMovies, filmDetail]);
 
-  const saveMovieHandler = () => {
-    const savingMovieData = {
-      ...movieData,
-      movieId: movieData.id,
-      image: `${MOVIES_IMAGES_BASE_URL}${movieData.image.url}`,
-      thumbnail: `${MOVIES_IMAGES_BASE_URL}${movieData.image.formats.thumbnail.url}`,
+  const handleFilmSave = () => {
+    const savingFilmDetail = {
+      ...filmDetail,
+      movieId: filmDetail.id,
+      image: `${FILMS_BASE_URL}${filmDetail.image.url}`,
+      thumbnail: `${FILMS_BASE_URL}${filmDetail.image.formats.thumbnail.url}`,
     };
-    delete savingMovieData.id;
-    delete savingMovieData.created_at;
-    delete savingMovieData.updated_at;
+    delete savingFilmDetail.id;
+    delete savingFilmDetail.created_at;
+    delete savingFilmDetail.updated_at;
 
-    mainApi.saveMovie(savingMovieData)
-      .then(movie => {
-        setSavedMovies([...savedMovies, movie]);
+    mainApi
+      .saveMovie(savingFilmDetail)
+      .then((film) => {
+        setSavedMovies([...savedMovies, film]);
       })
-      .catch(err => {
-        setIsModalOpened(true);
-        setModalText(err);
-      })
-  }
+      .catch((err) => {
+        setIsPopupShown(true);
+        setPopupText(err);
+      });
+  };
 
-  const onDeleteMovie = () => {
-    const deleteParam = pathname === '/movies'
-      ? movieData.id
-      : movieData.movieId;
-    const movieToDelete = savedMovies.find(movie => movie.movieId === deleteParam);
+  const handleFilmDelete = () => {
+    const deleteParam =
+      pathname === "/movies" ? filmDetail.id : filmDetail.movieId;
+    const filmToDelete = savedMovies.find(
+      (film) => film.movieId === deleteParam
+    );
 
-    mainApi.deleteMovie(movieToDelete._id)
-      .then(deletedMovieData => {
-        setSavedMovies(savedMovies.filter(movie => movie._id !== deletedMovieData._id));
+    mainApi
+      .deleteMovie(filmToDelete._id)
+      .then((deletedFilmData) => {
+        setSavedMovies(
+          savedMovies.filter((film) => film._id !== deletedFilmData._id)
+        );
       })
-      .catch(err => {
-        setIsModalOpened(true);
-        setModalText(err);
-      })
-  }
+      .catch((err) => {
+        setIsPopupShown(true);
+        setPopupText(err);
+      });
+  };
 
   return (
     <li className="movie-card">
-
-      <Modal isOpen={isModalOpened}>
-        <ModalContent onClose={handleModalClose} modalText={modalText} />
-      </Modal>
+      <ModalOverlay isModalOpened={isPopupShown}>
+        <ModalContent onClose={closeModalAction} modalText={popupText} />
+      </ModalOverlay>
       <div className="movie-card__description">
-        <h2 className="movie-card__name">
-          {movieData.nameRU}
-        </h2>
+        <h2 className="movie-card__name">{filmDetail.nameRU}</h2>
         <span className="movie-card__duration">
-        {movieData.duration} минут
+          {filmDetail.duration} минут
         </span>
       </div>
       <a
         className="movie-card__trailer"
-        href={movieData.trailerLink}
+        href={filmDetail.trailerLink}
         target="_blank"
         rel="noreferrer"
       >
@@ -85,22 +92,21 @@ const MoviesCard = ({ movieData }) => {
           className="movie-card__image"
           src={
             pathname === "/movies"
-              ? `${MOVIES_IMAGES_BASE_URL}/${movieData.image.url}`
-              : movieData.image
+              ? `${FILMS_BASE_URL}/${filmDetail.image.url}`
+              : filmDetail.image
           }
-          alt={movieData.nameRU}
+          alt={filmDetail.nameRU}
         />
       </a>
 
-      <MovieCardButton
-        onClickHandler={isMovieSaved ? onDeleteMovie : saveMovieHandler}
-        typeClass={isMovieSaved && pathname === "/movies"}
+      <ButtonInsideFilmCard
+        onClickHandler={isFilmStored ? handleFilmDelete : handleFilmSave}
+        typeClass={isFilmStored && pathname === "/movies"}
       >
-        {pathname === "/movies" ? 'Сохранить' : 'X'}
-      </MovieCardButton>
-  
+        {pathname === "/movies" ? "Сохранить" : "X"}
+      </ButtonInsideFilmCard>
     </li>
-  )
+  );
 };
 
 export default MoviesCard;

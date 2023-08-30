@@ -1,20 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import "./Profile.css";
-import { useCurrentUserContext } from "../../contexts/CurrentUserContextProvider";
+import { useUserDetails } from "../../contexts/UserDataProvider";
 import { useNavigate } from "react-router-dom";
 import { mainApi } from "../../utils/MainApi";
-import { useFormWithValidation } from "../../hooks/useFormWithValidation";
+import { useCustomFormValidation } from "../../hooks/useCustomFormValidation";
 import {
-  MESSAGE_API_PROFILE_SUCCESS,
-  PATTERN_EMAIL,
+  PROFILE_UPDATE_SUCCESS_MESSAGE,
+  EMAIL_REGEX_PATTERN,
 } from "../../constants/constants";
 
 const Profile = ({ setLoginStatus }) => {
-  const { currentUser, setCurrentUser } = useCurrentUserContext();
+  const { currentUser, setCurrentUser } = useUserDetails();
   const [isSameValues, setIsSameValues] = useState(true);
   const [apiMessage, setApiMessage] = useState("");
-  const { values, handleChange, errors, isValid, resetForm } =
-    useFormWithValidation();
+  const { values, handleInputChange, errors, isFormValid, resetForm } =
+    useCustomFormValidation();
   const navigate = useNavigate();
   const nameInputRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -31,7 +31,7 @@ const Profile = ({ setLoginStatus }) => {
       .editUserData(values)
       .then((updatedUserData) => {
         setCurrentUser(updatedUserData);
-        setApiMessage(MESSAGE_API_PROFILE_SUCCESS);
+        setApiMessage(PROFILE_UPDATE_SUCCESS_MESSAGE);
       })
       .catch((error) => {
         setApiMessage(error);
@@ -58,7 +58,6 @@ const Profile = ({ setLoginStatus }) => {
       .logoutUser()
       .then(() => {
         setCurrentUser({ name: "", email: "" });
-        localStorage.removeItem("currentId");
         localStorage.removeItem("search");
         localStorage.removeItem("token");
         setLoginStatus(false);
@@ -66,7 +65,6 @@ const Profile = ({ setLoginStatus }) => {
       })
       .catch(() => {
         setCurrentUser({ name: "", email: "" });
-        localStorage.removeItem("currentId");
         localStorage.removeItem("search");
         localStorage.removeItem("token");
         setLoginStatus(false);
@@ -107,7 +105,7 @@ const Profile = ({ setLoginStatus }) => {
               className="profile__input"
               placeholder="Укажите имя"
               value={values.name || ""}
-              onChange={handleChange}
+              onChange={handleInputChange}
               minLength={2}
               maxLength={30}
             />
@@ -126,8 +124,8 @@ const Profile = ({ setLoginStatus }) => {
               className="profile__input"
               placeholder="Укажите почту"
               value={values.email || ""}
-              onChange={handleChange}
-              pattern={PATTERN_EMAIL}
+              onChange={handleInputChange}
+              pattern={EMAIL_REGEX_PATTERN}
             />
           </div>
           <span className="profile__error">{errors.email}</span>
@@ -139,7 +137,7 @@ const Profile = ({ setLoginStatus }) => {
           <button
             type="submit"
             className="profile__submit"
-            disabled={isSameValues || !isValid}
+            disabled={isSameValues || !isFormValid}
           >
             Сохранить
           </button>

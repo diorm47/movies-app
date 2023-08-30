@@ -19,26 +19,26 @@ export const getCardsAmount = () => {
   return DESKTOP_CARDS_AMOUNT;
 };
 
-// Фильтрация фильмов
-const checkMovieDuration = (
-  movieDuration,
-  isShortsIncluded,
-  shortsDurationCriteria = SHORTS_DURATION
-) => {
-  return (
-    (isShortsIncluded && movieDuration <= shortsDurationCriteria) ||
-    (!isShortsIncluded && movieDuration > shortsDurationCriteria)
-  );
-};
-
-const filterMovieByQuerry = (movie, searchQuerry) => {
-  const lowerQuerry = searchQuerry.toLowerCase();
-  return movie.nameRU.toLowerCase().includes(lowerQuerry);
+const movieFilters = {
+  checkDuration: ({
+    duration,
+    includeShorts,
+    shortsDurationCriteria = SHORTS_DURATION,
+  }) => {
+    return (
+      (includeShorts && duration <= shortsDurationCriteria) ||
+      (!includeShorts && duration > shortsDurationCriteria)
+    );
+  },
+  filterByQuerry: ({ nameRU, querry }) => {
+    const lowerQuerry = querry.toLowerCase();
+    return nameRU.toLowerCase().includes(lowerQuerry);
+  },
 };
 
 export const movieFilter = (movie, { querry, includeShorts }) => {
   return (
-    checkMovieDuration(movie.duration, includeShorts) &&
-    filterMovieByQuerry(movie, querry)
+    movieFilters.checkDuration({ ...movie, includeShorts }) &&
+    movieFilters.filterByQuerry({ ...movie, querry })
   );
 };

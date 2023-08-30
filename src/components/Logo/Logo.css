@@ -1,8 +1,0 @@
-.logo__image {
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.logo:hover .logo__image {
-  opacity: 0.7;
-}

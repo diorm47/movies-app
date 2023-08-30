@@ -1,23 +1,26 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useFormWithValidation } from "../../hooks/useFormWithValidation";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useCustomFormValidation } from "../../hooks/useCustomFormValidation";
 import "./Register.css";
-import Logo from "../Logo/Logo";
+import { ReactComponent as Logo } from "../../images/logo.svg";
 import { mainApi } from "../../utils/MainApi";
-import { useCurrentUserContext } from "../../contexts/CurrentUserContextProvider";
+import { useUserDetails } from "../../contexts/UserDataProvider";
 import { useState } from "react";
 import Preloader from "../Preloader/Preloader";
-import { PATTERN_EMAIL } from "../../constants/constants";
+import { EMAIL_REGEX_PATTERN } from "../../constants/constants";
 
 const Register = ({ setLoginStatus }) => {
-  const { values, handleChange, errors, isValid, resetForm, inputVilidities } =
-    useFormWithValidation();
+  const {
+    values,
+    handleInputChange,
+    errors,
+    isFormValid,
+    resetForm,
+    inputStatuses,
+  } = useCustomFormValidation();
   const navigate = useNavigate();
-  const { setCurrentUser } = useCurrentUserContext();
+  const { setCurrentUser } = useUserDetails();
   const [apiErrorMessage, setApiErrorMessage] = useState("");
   const [isLoadind, setIsLoading] = useState(false);
-  const defaultRegisterInputClassName = "register__input";
-  const errorRegisterInputClassName =
-    "register__input register__input_type_error";
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -35,7 +38,6 @@ const Register = ({ setLoginStatus }) => {
         setCurrentUser(userData);
         setLoginStatus(true);
         localStorage.setItem("token", userData.token);
-        localStorage.setItem("currentId", userData._id);
         navigate("/movies", { replace: true });
       })
       .then(() => {
@@ -53,7 +55,9 @@ const Register = ({ setLoginStatus }) => {
 
   return (
     <main className="register container">
-      <Logo />
+      <NavLink to="/" className="login__link">
+        <Logo />
+      </NavLink>
       <h1 className="register__title">Добро пожаловать!</h1>
       <form
         action="#"
@@ -67,9 +71,9 @@ const Register = ({ setLoginStatus }) => {
           <input
             type="text"
             className={
-              inputVilidities.name === undefined || inputVilidities.name
-                ? defaultRegisterInputClassName
-                : errorRegisterInputClassName
+              inputStatuses.name === undefined || inputStatuses.name
+                ? "register__input"
+                : "register__input register__input_type_error"
             }
             name="name"
             required
@@ -77,7 +81,7 @@ const Register = ({ setLoginStatus }) => {
             autoComplete="off"
             minLength="2"
             maxLength="40"
-            onChange={handleChange}
+            onChange={handleInputChange}
             value={values.name || ""}
           />
           <span className="register__error">{errors.name}</span>
@@ -87,9 +91,9 @@ const Register = ({ setLoginStatus }) => {
           <input
             type="email"
             className={
-              inputVilidities.email === undefined || inputVilidities.email
-                ? defaultRegisterInputClassName
-                : errorRegisterInputClassName
+              inputStatuses.email === undefined || inputStatuses.email
+                ? "register__input"
+                : "register__input register__input_type_error"
             }
             name="email"
             required
@@ -97,9 +101,9 @@ const Register = ({ setLoginStatus }) => {
             autoComplete="off"
             minLength="2"
             maxLength="40"
-            onChange={handleChange}
+            onChange={handleInputChange}
             value={values.email || ""}
-            pattern={PATTERN_EMAIL}
+            pattern={EMAIL_REGEX_PATTERN}
           />
           <span className="register__error">{errors.email}</span>
         </label>
@@ -108,9 +112,9 @@ const Register = ({ setLoginStatus }) => {
           <input
             type="password"
             className={
-              inputVilidities.password === undefined || inputVilidities.password
-                ? defaultRegisterInputClassName
-                : errorRegisterInputClassName
+              inputStatuses.password === undefined || inputStatuses.password
+                ? "register__input"
+                : "register__input register__input_type_error"
             }
             name="password"
             required
@@ -118,7 +122,7 @@ const Register = ({ setLoginStatus }) => {
             autoComplete="off"
             minLength="2"
             maxLength="200"
-            onChange={handleChange}
+            onChange={handleInputChange}
             value={values.password || ""}
           />
           <span className="register__error">{errors.password}</span>
@@ -131,12 +135,12 @@ const Register = ({ setLoginStatus }) => {
         ) : (
           <button
             className={
-              isValid
+              isFormValid
                 ? "register__submit"
                 : "register__submit register__submit_disabled"
             }
             type="submit"
-            disabled={!isValid}
+            disabled={!isFormValid}
           >
             Зарегистрироваться
           </button>

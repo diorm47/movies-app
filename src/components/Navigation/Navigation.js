@@ -1,40 +1,47 @@
-import { useState } from 'react';
-import Burger from './Burger/Burger';
-import BurgerMenu from './BurgerMenu/BurgerMenu';
-import LoggedUserNavigation from './LoggedUserNavigation/LoggedUserNavigation';
-import LoginRegisterMenu from './LoginRegisterMenu/LoginRegisterMenu';
-import './Navigation.css';
+import { useState } from "react";
 
-const Navigation = ({ isLogged, isBurger = true }) => {
-  const [isBurgerOpened, setIsBurgerOpened] = useState(false);
+import MobileBurgerMenu from "./MobileBurgerMenu/MobileBurgerMenu";
+import LoggedUserNavigation from "./LoggedUserNavigation/LoggedUserNavigation";
+import LoginMenu from "./LoginMenu/LoginMenu";
+import "./Navigation.css";
 
-  const handleOpenBurgerMenu = () => {
-    setIsBurgerOpened(true);
-  }
+const Navigation = ({ isLogged, isMobBurger = true }) => {
+  const [isMobBurgerOpened, setisMobBurgerOpened] = useState(false);
 
-  const handleCloseBurgerMenu = () => {
-    setIsBurgerOpened(false);
-  }
+  const handleOpenMobileBurgerMenu = () => {
+    setisMobBurgerOpened(true);
+  };
+
+  const handleCloseMobileBurgerMenu = () => {
+    setisMobBurgerOpened(false);
+  };
 
   return (
-    <nav className={isLogged && !isBurger ? "navigation navigation_logged" : "navigation"}>
+    <nav
+      className={
+        isLogged && !isMobBurger ? "navigation navigation_logged" : "navigation"
+      }
+    >
+      {isLogged ? (
+        <>
+          <button
+            className="burger-button"
+            type="button"
+            onClick={handleOpenMobileBurgerMenu}
+          />
 
-    {
-      isLogged
-        ? <>
-          <Burger onClick={handleOpenBurgerMenu}/>
           <LoggedUserNavigation />
         </>
-        : <LoginRegisterMenu />
-    }
+      ) : (
+        <LoginMenu />
+      )}
 
-    <BurgerMenu
-      isOpened={isBurgerOpened}
-      closeBurger={handleCloseBurgerMenu}
-    />
-
+      <MobileBurgerMenu
+        isOpened={isMobBurgerOpened}
+        closeBurger={handleCloseMobileBurgerMenu}
+      />
     </nav>
-  )
+  );
 };
 
 export default Navigation;
